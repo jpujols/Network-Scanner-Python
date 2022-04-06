@@ -11,10 +11,15 @@ def scan(ip):
   arp_request_broadcast = broadcast/arp_request
  
   #Store response value (packet answer and unanswered). Timeout = no response = terminate execution
-  answered_list = scapy.srp(arp_request_broadcast, timeout=1)[0]
+  answered_list = scapy.srp(arp_request_broadcast, timeout=1, verbose=False)[0]
 
-  #Iterate over answered packets and analyze data
+  #Formats output and add 3 tabs between IP and MAC for user-friendly output
+  print("IP\t\t\tMAC Address\n-----------------------")
+  
+  #Iterate over answered packets and parse output with IP address and MAC address
   for element in answered_list:
-    print(element)
+    #format output to 2 columns
+    print(element[1].psrc + "\t\t" + element[1].hwsrc)
+    
 
 scan("10.0.2.0/24")
