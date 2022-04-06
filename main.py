@@ -1,4 +1,5 @@
 import scapy.all as scapy
+import pprint
 
 
 def scan(ip):
@@ -8,10 +9,12 @@ def scan(ip):
   broadcast = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
   #Send broadcast msg to everyone
   arp_request_broadcast = broadcast/arp_request
-  #Use sr (Send and Receive packets to test scanner)
-  scapy.srp(arp_request_broadcast)
+ 
   #Store response value (packet answer and unanswered). Timeout = no response = terminate execution
-  answered, unanswered = scapy.srp(arp_request_broadcast, timeout=1)
-  print(answered)
+  answered_list = scapy.srp(arp_request_broadcast, timeout=1)[0]
+
+  #Iterate over answered packets and analyze data
+  for element in answered_list:
+    print(element)
 
 scan("10.0.2.0/24")
